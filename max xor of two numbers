@@ -1,0 +1,59 @@
+class Solution {
+public:
+    class TrieNode{
+        public:
+        TrieNode *left;
+        TrieNode *right;
+    };
+  
+    void insert(int n,TrieNode* root){
+        TrieNode *pCrawl=root;
+        for(int i=31;i>=0;i--){
+            int temp=(n>>i)&1;
+            if(temp==0){
+                if(!pCrawl->left)
+                    pCrawl->left=new TrieNode();
+                pCrawl=pCrawl->left;
+            }
+            else{
+                if(!pCrawl->right)
+                    pCrawl->right=new TrieNode();
+                pCrawl=pCrawl->right;
+            }
+        }
+    }
+    int findMaximumXOR(vector<int>& nums) {
+        TrieNode *root=new TrieNode();
+        for(int i:nums){
+            insert(i,root);
+        }
+        int max_xor=INT_MIN;
+        for(int i:nums){
+            TrieNode *cur=root;
+            int cur_xor=0;
+            for(int j=31;j>=0;j--){
+                int k=(i>>j)&1;
+                if(k==0){
+                    if(cur->right){
+                        cur_xor+=pow(2,j);
+                        cur=cur->right;
+                    }
+                    else
+                        cur=cur->left;
+                }
+                else{
+                    if(cur->left){
+                        cur_xor+=pow(2,j);
+                        cur=cur->left;
+                    }
+                    else
+                        cur=cur->right;
+                }
+            }
+            if(cur_xor>max_xor)
+                max_xor=cur_xor;
+        }
+        return max_xor;
+    }
+    
+};
