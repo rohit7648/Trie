@@ -1,0 +1,45 @@
+#There is very good use of comparator function to sort a map
+#it is a solution of leetcode problem(problem No.=692)
+
+'''Given a non-empty list of words, return the k most frequent elements.
+
+Your answer should be sorted by frequency from highest to lowest. If two words have the same frequency, then the word with the lower alphabetical order comes first.
+
+Example 1:
+Input: ["i", "love", "leetcode", "i", "love", "coding"], k = 2
+Output: ["i", "love"]
+Explanation: "i" and "love" are the two most frequent words.
+    Note that "i" comes before "love" due to a lower alphabetical order.
+''''
+
+class Solution {
+public:
+    static bool byVal(const pair<string, int> &a, const pair<string, int> &b) {
+       return (a.second > b.second); 
+    }
+    
+    static bool byChar(const pair<string, int> &a, const pair<string, int> &b) {
+        if(a.second==b.second)
+            return a.first<b.first;
+        return a.second>b.second;
+    }
+    
+    vector<string> topKFrequent(vector<string>& words, int k) {
+        unordered_map<string,int>m;
+        for(string s:words)
+            m[s]++;
+        vector<string>ans;
+        unordered_map<string,int>::iterator it;
+        vector<pair<string,int>>v;
+        for(it=m.begin();it!=m.end() && k!=0;it++)
+            v.push_back({it->first,it->second});
+        sort(v.begin(),v.end(),byVal);
+        sort(v.begin(),v.end(),byChar);
+        for(int i=0;i<k;i++){
+            pair<string,int>p=v[i];
+            ans.push_back(p.first);
+        }
+            
+        return ans;
+    }
+};
